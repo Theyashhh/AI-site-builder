@@ -1,7 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import type { Project } from '../types'
-import { ArrowBigDownDashIcon, CodeIcon, EyeIcon, EyeOffIcon, FullscreenIcon, LaptopIcon, Loader2Icon, MessageSquareCodeIcon, SaveIcon, SmartphoneIcon, TabletIcon, XIcon } from 'lucide-react'
+import { EyeIcon, EyeOffIcon, FullscreenIcon, LaptopIcon, Loader2Icon, MessageSquareCodeIcon, SaveIcon, SmartphoneIcon, TabletIcon, XIcon } from 'lucide-react'
 import Sidebar from '../components/Sidebar'
 import ProjectPreview, { type ProjectPreviewRef } from '../components/ProjectPreview'
 import { toast } from 'sonner'
@@ -22,7 +22,6 @@ const Projects = () => {
   
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
-  const [isCodeModalOpen, setIsCodeModalOpen] = useState(false)
 
   const [isExplorerOpen, setIsExplorerOpen] = useState(false);
 
@@ -68,14 +67,6 @@ try {
     console.log(error);
   }
 };
-
-  const openCodeModal = () => {
-    if (!project?.current_code && !previewRef.current?.getCode()) {
-      toast.error('No code available to view');
-      return;
-    }
-    setIsCodeModalOpen(true);
-  };
 
 
   useEffect(()=>{

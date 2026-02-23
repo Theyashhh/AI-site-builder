@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import type { Project } from '../types'
 import { useNavigate } from 'react-router-dom'
 import { Loader2Icon, PlusIcon, TrashIcon } from 'lucide-react'
