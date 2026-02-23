@@ -6,23 +6,22 @@ export default defineConfig({
   plugins: [
     tailwindcss(),
   ],
+  base: './',  // Add this line - important for asset paths
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src")
     }
   },
-
-   publicDir: 'public',
+  publicDir: 'public',
   build: {
     outDir: 'dist',
-    // Copy _redirects to dist folder
+    assetsDir: 'assets',  // Add this
     rollupOptions: {
       input: {
         main: path.resolve(__dirname, 'index.html')
       }
     }
-  },
-
+},
   server: {
     proxy: {
       '/api': {
@@ -31,5 +30,4 @@ export default defineConfig({
         secure: false,
       },
     },
-  },
-})
+  },})
