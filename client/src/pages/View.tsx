@@ -13,37 +13,40 @@ const View = () => {
 
   const fetchCode = async () => {
     try {
-      const {data} = await api.get('/api/projects/published/${projectId}');
-      setCode(data.code)
-      setLoading(false)
-    } catch (error: any) {
-     toast.error(error?.response?.data?.message || error.message);
-     console.log(error) 
-    }
-  };
+      const { data } = await api.get(`/api/project/published/${projectId}`);
 
+      setCode(data.code);
+      setLoading(false);
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message || error.message);
+      console.log(error);
+    } };
 
   useEffect(() => {
-  fetchCode();
-}, []);
+    if (projectId) {
+      fetchCode();
+    }
+  }, [projectId]);
 
-if (loading) {
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <Loader2Icon className="size-7 animate-spin text-indigo-200" />
+      </div>
+    );
+  }
+
   return (
-    <div className="flex items-center justify-center h-screen">
-      <Loader2Icon className="size-7 animate-spin text-indigo-200" />
+    <div className="h-screen">
+      {code && (
+        <ProjectPreview
+          project={{ current_code: code } as Project}
+          isGenerating={false}
+          showEditorPanel={false}
+        />
+      )}
     </div>
   );
-}
-
-return (
-  <div className="h-screen">
-    {code && (
-      <ProjectPreview
-        project={{ current_code: code } as Project} isGenerating={false} showEditorPanel={false}/>
-    )}
-  </div>
-);
-
-}
+};
 
 export default View

@@ -80,7 +80,7 @@ const Community = () => {
     <button
       className='px-3 py-1.5 bg-white/10 hover:bg-white/15 rounded-md transition-colors flex items-center gap-2'>
       <span className='bg-gray-200 size-4.5 rounded-full text-black font-semibold flex items-center
-       justify-center'>{project.user?.name?.slice(0.1)}</span>
+       justify-center'>{project.user?.name?.slice(0, 1)}</span>
       {project.user?.name}
     </button>
   </div>

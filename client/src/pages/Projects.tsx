@@ -1,12 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import type { Project } from '../types'
-import { ArrowBigDownDashIcon, EyeIcon, EyeOffIcon, FullscreenIcon, LaptopIcon, Loader2Icon, MessageSquareCodeIcon, SaveIcon, SmartphoneIcon, TabletIcon, XIcon } from 'lucide-react'
+import { ArrowBigDownDashIcon, CodeIcon, EyeIcon, EyeOffIcon, FullscreenIcon, LaptopIcon, Loader2Icon, MessageSquareCodeIcon, SaveIcon, SmartphoneIcon, TabletIcon, XIcon } from 'lucide-react'
 import Sidebar from '../components/Sidebar'
 import ProjectPreview, { type ProjectPreviewRef } from '../components/ProjectPreview'
 import { toast } from 'sonner'
 import api from '@/configs/axios'
 import { authClient } from '@/lib/auth-client'
+import ProjectExplorerModal from '../components/ProjectExplorerModal';
 
 const Projects = () => {
   const {projectId} = useParams()
@@ -21,6 +22,9 @@ const Projects = () => {
   
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
+  const [isCodeModalOpen, setIsCodeModalOpen] = useState(false)
+
+  const [isExplorerOpen, setIsExplorerOpen] = useState(false);
 
   const previewRef = useRef<ProjectPreviewRef>(null)
 
@@ -49,31 +53,7 @@ try {
   toast.error(error?.response?.data?.message || error.message);
   console.log(error);
 } finally {
-  setIsSaving(false);
-}
-
-  }
-// Download code (index.html)
-  const downloadCode = () => {
-    const code =
-  previewRef.current?.getCode() || project?.current_code;
-
-if (!code) {
-  if (isGenerating) {
-    return;
-  }
-  return;
-}
-
-const element = document.createElement('a');
-const file = new Blob([code], { type: 'text/html' });
-
-element.href = URL.createObjectURL(file);
-element.download = 'index.html';
-
-document.body.appendChild(element);
-element.click();
-
+  setIsSaving(false);}
   }
 
   const togglePublish = async () => {
@@ -88,6 +68,14 @@ element.click();
     console.log(error);
   }
 };
+
+  const openCodeModal = () => {
+    if (!project?.current_code && !previewRef.current?.getCode()) {
+      toast.error('No code available to view');
+      return;
+    }
+    setIsCodeModalOpen(true);
+  };
 
 
   useEffect(()=>{
@@ -174,7 +162,7 @@ element.click();
       {/* right */}
       <div className='flex items-center justify-end gap-3 flex-1 text-xs sm:text-sm'>
  <button
-  onClick={saveProject}  // ✅ Add this onClick
+  onClick={saveProject}
   disabled={isSaving}
   className='max-sm:hidden bg-gray-800 hover:bg-gray-700 text-white px-3.5 py-1 flex items-center gap-2
   rounded sm:rounded-sm transition-colors border border-gray-700'
@@ -194,13 +182,15 @@ element.click();
     border-gray-700 hover:border-gray-500 transition-colors'>
     <FullscreenIcon size={16} /> Preview
   </Link>
-  <button
-  onClick={downloadCode}
-  className='bg-linear-to-br from-blue-700 to-blue-600 hover:from-blue-600 hover:to-blue-500
-  text-white px-3.5 py-1 flex items-center gap-2 rounded sm:rounded-sm transition-colors'
+
+
+<button 
+  onClick={() => setIsExplorerOpen(true)}
+  className="px-4 py-2 bg-indigo-600 text-white rounded-md"
 >
-  <ArrowBigDownDashIcon size={16} /> Download
+  View Full Project
 </button>
+
 
 <button
   onClick={togglePublish}
@@ -226,6 +216,12 @@ element.click();
     <ProjectPreview ref={previewRef} project={project} isGenerating={isGenerating} device={device} />
    </div>
     </div>
+
+   {/* Add modal */}
+<ProjectExplorerModal
+  isOpen={isExplorerOpen}
+  onClose={() => setIsExplorerOpen(false)}
+/>
     </div>
     
   )
