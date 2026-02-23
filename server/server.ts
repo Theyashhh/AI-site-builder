@@ -15,6 +15,8 @@ const port = 3000;
 const corsOptions = {
     origin: process.env.TRUSTED_ORIGINS?.split(',') || [],
     credentials: true,
+     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Cookie']
 }
 app.use(cors(corsOptions))
 app.post('/api/stripe', express.raw({type: 'application/json'}), stripeWebhook)
