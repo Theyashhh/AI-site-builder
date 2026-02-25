@@ -28,7 +28,6 @@ export const auth = betterAuth({
                     secure: true,  // Always true in production
                     sameSite: 'none',  // Changed from conditional to always 'none'
                     path: '/',
-                    domain: '.onrender.com',  // Add this - allows cookie to work across subdomains
                 }
             }
         }
